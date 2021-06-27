@@ -44,12 +44,22 @@ namespace NestingApp
             this.checkExploreconcaveareas = new System.Windows.Forms.ToolStripMenuItem();
             this.skinSplitContainer1 = new CCWin.SkinControl.SkinSplitContainer();
             this.skinSplitContainer2 = new CCWin.SkinControl.SkinSplitContainer();
+            this.picNestPath = new CCWin.SkinControl.SkinPictureBox();
+            this.pictConvertedImage = new CCWin.SkinControl.SkinPictureBox();
+            this.skinPictureBox3 = new CCWin.SkinControl.SkinPictureBox();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tspMainTool.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer1)).BeginInit();
+            this.skinSplitContainer1.Panel1.SuspendLayout();
             this.skinSplitContainer1.Panel2.SuspendLayout();
             this.skinSplitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer2)).BeginInit();
+            this.skinSplitContainer2.Panel1.SuspendLayout();
+            this.skinSplitContainer2.Panel2.SuspendLayout();
             this.skinSplitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictConvertedImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // tspMainTool
@@ -93,7 +103,8 @@ namespace NestingApp
             this.btnUpload,
             this.btnStart,
             this.btnDownload,
-            this.btnSetting});
+            this.btnSetting,
+            this.toolStripProgressBar});
             this.tspMainTool.Location = new System.Drawing.Point(4, 28);
             this.tspMainTool.MaximumSize = new System.Drawing.Size(0, 80);
             this.tspMainTool.MinimumSize = new System.Drawing.Size(0, 80);
@@ -218,6 +229,10 @@ namespace NestingApp
             this.skinSplitContainer1.Location = new System.Drawing.Point(4, 108);
             this.skinSplitContainer1.Name = "skinSplitContainer1";
             // 
+            // skinSplitContainer1.Panel1
+            // 
+            this.skinSplitContainer1.Panel1.Controls.Add(this.pictConvertedImage);
+            // 
             // skinSplitContainer1.Panel2
             // 
             this.skinSplitContainer1.Panel2.Controls.Add(this.skinSplitContainer2);
@@ -232,9 +247,59 @@ namespace NestingApp
             this.skinSplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.skinSplitContainer2.Location = new System.Drawing.Point(0, 0);
             this.skinSplitContainer2.Name = "skinSplitContainer2";
+            // 
+            // skinSplitContainer2.Panel1
+            // 
+            this.skinSplitContainer2.Panel1.Controls.Add(this.picNestPath);
+            // 
+            // skinSplitContainer2.Panel2
+            // 
+            this.skinSplitContainer2.Panel2.Controls.Add(this.skinPictureBox3);
             this.skinSplitContainer2.Size = new System.Drawing.Size(922, 521);
             this.skinSplitContainer2.SplitterDistance = 698;
             this.skinSplitContainer2.TabIndex = 0;
+            // 
+            // picNestPath
+            // 
+            this.picNestPath.BackColor = System.Drawing.Color.Transparent;
+            this.picNestPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picNestPath.Location = new System.Drawing.Point(0, 0);
+            this.picNestPath.Name = "picNestPath";
+            this.picNestPath.Size = new System.Drawing.Size(698, 521);
+            this.picNestPath.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picNestPath.TabIndex = 0;
+            this.picNestPath.TabStop = false;
+            // 
+            // pictConvertedImage
+            // 
+            this.pictConvertedImage.BackColor = System.Drawing.Color.Transparent;
+            this.pictConvertedImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictConvertedImage.Location = new System.Drawing.Point(0, 0);
+            this.pictConvertedImage.Name = "pictConvertedImage";
+            this.pictConvertedImage.Size = new System.Drawing.Size(209, 521);
+            this.pictConvertedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictConvertedImage.TabIndex = 1;
+            this.pictConvertedImage.TabStop = false;
+            this.pictConvertedImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictConvertedImage_MouseDown);
+            // 
+            // skinPictureBox3
+            // 
+            this.skinPictureBox3.BackColor = System.Drawing.Color.Transparent;
+            this.skinPictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.skinPictureBox3.Location = new System.Drawing.Point(0, 0);
+            this.skinPictureBox3.Name = "skinPictureBox3";
+            this.skinPictureBox3.Size = new System.Drawing.Size(220, 521);
+            this.skinPictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.skinPictureBox3.TabIndex = 1;
+            this.skinPictureBox3.TabStop = false;
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Margin = new System.Windows.Forms.Padding(1, 25, 1, 25);
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 30);
+            this.toolStripProgressBar.Value = 50;
+            this.toolStripProgressBar.Visible = false;
             // 
             // MainForm
             // 
@@ -251,11 +316,17 @@ namespace NestingApp
             this.Text = "嵌套";
             this.tspMainTool.ResumeLayout(false);
             this.tspMainTool.PerformLayout();
+            this.skinSplitContainer1.Panel1.ResumeLayout(false);
             this.skinSplitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer1)).EndInit();
             this.skinSplitContainer1.ResumeLayout(false);
+            this.skinSplitContainer2.Panel1.ResumeLayout(false);
+            this.skinSplitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer2)).EndInit();
             this.skinSplitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictConvertedImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,6 +347,10 @@ namespace NestingApp
         private System.Windows.Forms.ToolStripTextBox txtGAmutationrate;
         private System.Windows.Forms.ToolStripMenuItem checkPartinPart;
         private System.Windows.Forms.ToolStripMenuItem checkExploreconcaveareas;
+        private CCWin.SkinControl.SkinPictureBox pictConvertedImage;
+        private CCWin.SkinControl.SkinPictureBox picNestPath;
+        private CCWin.SkinControl.SkinPictureBox skinPictureBox3;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }
 
