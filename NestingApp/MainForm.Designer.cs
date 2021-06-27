@@ -150,6 +150,7 @@ namespace NestingApp
             this.btnDownload.Text = "下载SVG";
             this.btnDownload.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnDownload.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnDownload.Visible = false;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // btnSetting

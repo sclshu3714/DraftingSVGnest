@@ -9,11 +9,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace NestingApp
 {
@@ -80,6 +82,60 @@ namespace NestingApp
 
         #endregion
 
+        public List<NestPath> transferSvgIntoPolygonsSvg(SvgDocument document)
+        {
+            List<NestPath> nestPaths = new List<NestPath>();
+            foreach (SvgElement item in document.Children)
+            {
+                AddNestPath(item, ref nestPaths);
+            }
+            return nestPaths;
+        }
+
+        public void AddNestPath(SvgElement element, ref List<NestPath> nestPaths)
+        {
+            switch (element)
+            {
+                case Svg.SvgGroup Group:
+                    {
+                        foreach (SvgElement node in Group.Nodes.Where(nd => nd is SvgElement))
+                            AddNestPath(node, ref nestPaths);
+                    }
+                    break;
+                case Svg.SvgPolygon Polygon:
+                    NestPath polygon = new NestPath();
+                    foreach (SvgUnit point in Polygon.Points)
+                    {
+                        string[] s = point.Value.ToString().Split('.');
+                        double x = Convert.ToDouble(s[0]);
+                        double y = Convert.ToDouble(s[1]);
+                        polygon.add(x, y);
+                    }
+                    polygon.bid = nestPaths.Count;
+                    polygon.setRotation(4);
+                    nestPaths.Add(polygon);
+                    break;
+
+                case Svg.SvgRectangle Rectangle:
+                    {
+                        double width = Rectangle.Bounds.Width;
+                        double height = Rectangle.Bounds.Height;
+                        double x = Rectangle.Bounds.X;
+                        double y = Rectangle.Bounds.Y;
+                        NestPath rect = new NestPath();
+                        rect.add(x, y);
+                        rect.add(x + width, y);
+                        rect.add(x + width, y + height);
+                        rect.add(x, y + height);
+                        rect.bid = nestPaths.Count;
+                        rect.setRotation(4);
+                        nestPaths.Add(rect);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /// <summary>
         /// 开始嵌套计算
@@ -88,6 +144,10 @@ namespace NestingApp
         /// <param name="e"></param>
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if (File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg"))
+            {
+                File.Delete($"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg");
+            }
             this.Invoke(new Action(() => { toolStripProgressBar.Value = 0; toolStripProgressBar.Visible = true; this.Refresh(); }));
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 1000;
@@ -112,7 +172,8 @@ namespace NestingApp
                 bin.add(0, binHeight);
                 Console.WriteLine("Bin Size : Width = " + binWidth + " Height=" + binHeight);
                 var nestPaths = SvgUtil.transferSvgIntoPolygons("test.xml");
-                Console.WriteLine("Reading File = test.xml");
+                //var nestPaths = transferSvgIntoPolygonsSvg(document);
+                //Console.WriteLine("Reading File = test.xml");
                 Console.WriteLine("No of parts = " + nestPaths.Count);
                 Config config = new Config();
                 Console.WriteLine("Configuring Nest");
@@ -125,8 +186,12 @@ namespace NestingApp
                 Console.WriteLine("Converted to SVG format");
                 SvgUtil.saveSvgFile(svgPolygons, "output.svg");
                 Console.WriteLine("Saved svg file..Opening File");
-                documentOut = GetSvgDocument($"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg");
-                this.picNestPath.Image = documentOut.Draw();
+                if (File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg"))
+                {
+                    documentOut = GetSvgDocument($"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg");
+                    if (documentOut.HasChildren())
+                        this.picNestPath.Image = documentOut.Draw();
+                }
                 //Process.Start("output.svg");
                 Console.ReadLine();
                 this.Invoke(new Action(() => { timer.Stop(); toolStripProgressBar.Value = 100; toolStripProgressBar.Visible = false; this.Refresh(); }));
@@ -151,29 +216,37 @@ namespace NestingApp
         {
             IMaximumSize = new Size(this.pictConvertedImage.Width, this.pictConvertedImage.Height);
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = $"SVG文件(*.svg)|*.svg";
+            dialog.Filter = $"SVG文件(*.svg)|*.svg|XML文件(*.xml)|*.xml";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string FileName = dialog.FileName;
-                document = GetSvgDocument(FileName);
-                foreach (SvgElement item in document.Children)
+                if (dialog.FilterIndex == 1)
+                    document = GetSvgDocument(FileName);
+                else if (dialog.FilterIndex == 2)
                 {
-                    if (item is Svg.SvgGroup && item.Nodes.Count > 0)
-                    {
-                        foreach (SvgElement node in item.Nodes.Where(nd => nd is SvgElement))
-                        {
-                            //node.Color = new SvgColourServer(Color.Red);
-                            GetChild(node, node.ID, "A", Color.Red.ToArgb().ToString());
-                           //new SvgColourServer(Color.Lime);
-                        }
-                    }
-                    else
-                    {
-                        //item.Color = new SvgColourServer(Color.Red);
-                        GetChild(item, item.ID, "A", Color.Red.ToArgb().ToString());
-                    }
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(FileName);
+                    document = GetSvgDocument(xmlDocument);
                 }
-                pictConvertedImage.Image = GetBitmapFromSVG(FileName);
+                //foreach (SvgElement item in document.Children)
+                //{
+                //    if (item is Svg.SvgGroup && item.Nodes.Count > 0)
+                //    {
+                //        foreach (SvgElement node in item.Nodes.Where(nd => nd is SvgElement))
+                //        {
+                //            //node.Color = new SvgColourServer(Color.Red);
+                //            GetChild(node, node.ID, "A", Color.Red.ToArgb().ToString());
+                //           //new SvgColourServer(Color.Lime);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        //item.Color = new SvgColourServer(Color.Red);
+                //        GetChild(item, item.ID, "A", Color.Red.ToArgb().ToString());
+                //    }
+                //}
+                if (document != null)
+                    pictConvertedImage.Image = document.Draw();
             }
         }
 
@@ -195,6 +268,19 @@ namespace NestingApp
             Bitmap bmp = document.Draw();
             return bmp;
         }
+        /// <summary>
+        /// 获取一个svgdocument操作使用提供的路径。
+        /// </summary>
+        /// <param name="filePath">位图图像的路径.</param>
+        /// <returns>返回SVG文档</returns>
+        public SvgDocument GetSvgDocument(XmlDocument xmlDocument)
+        {
+            SvgDocument sdocument = SvgDocument.Open(xmlDocument);
+            if(sdocument != null)
+                sdocument = AdjustSize(sdocument);
+            return sdocument;
+        }
+
         /// <summary>
         /// 获取一个svgdocument操作使用提供的路径。
         /// </summary>

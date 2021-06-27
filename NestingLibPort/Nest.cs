@@ -362,6 +362,8 @@ namespace NestingLibPort
                 for (int j = 0; j < best.placements[i].Count; j++)
                 {
                     Vector v = best.placements[i][j];
+                    if (tree.Count <= v.id)
+                        continue;
                     NestPath nestPath = tree[v.id];
                     foreach (NestPath child in nestPath.getChildren())
                     {

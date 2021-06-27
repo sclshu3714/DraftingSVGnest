@@ -153,8 +153,5 @@ namespace NestingLibPort.Util
             }
             return nestPaths;
         }
-
-
-
     }
 }
