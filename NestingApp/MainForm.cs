@@ -3,12 +3,14 @@ using NestingLibPort;
 using NestingLibPort.Data;
 using NestingLibPort.Util;
 using Svg;
+using Svg.Transforms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -190,7 +192,11 @@ namespace NestingApp
                 {
                     documentOut = GetSvgDocument($"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg");
                     if (documentOut.HasChildren())
-                        this.picNestPath.Image = documentOut.Draw();
+                    {
+                        this.Invoke(new Action(() => {
+                            this.picNestPath.Image = documentOut.Draw();
+                        }));
+                    }
                 }
                 //Process.Start("output.svg");
                 Console.ReadLine();
@@ -214,7 +220,7 @@ namespace NestingApp
         /// <param name="e"></param>
         private void btnUpload_Click(object sender, EventArgs e)
         {
-            IMaximumSize = new Size(this.pictConvertedImage.Width, this.pictConvertedImage.Height);
+            //IMaximumSize = new Size(this.pictConvertedImage.Width, this.pictConvertedImage.Height);
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = $"SVG文件(*.svg)|*.svg|XML文件(*.xml)|*.xml";
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -228,6 +234,7 @@ namespace NestingApp
                     xmlDocument.Load(FileName);
                     document = GetSvgDocument(xmlDocument);
                 }
+                SetLargeImageList();
                 //foreach (SvgElement item in document.Children)
                 //{
                 //    if (item is Svg.SvgGroup && item.Nodes.Count > 0)
@@ -245,9 +252,106 @@ namespace NestingApp
                 //        GetChild(item, item.ID, "A", Color.Red.ToArgb().ToString());
                 //    }
                 //}
-                if (document != null)
-                    pictConvertedImage.Image = document.Draw();
+                //if (document != null)
+                //pictConvertedImage.Image = document.Draw();
             }
+        }
+
+
+        public void SetLargeImageList() {
+            ImageList imageList = new ImageList();
+            imageList.ImageSize = new Size(128, 128);
+            if (document != null)
+            {
+                //Graphics gMide = this.picNestPath.CreateGraphics();
+                int i = 0;
+                foreach (SvgElement element in document.Children) {
+                    i += 1;
+                    switch (element)
+                    {
+                        case Svg.SvgGroup Group:
+                            break;
+                        case Svg.SvgPolygon Polygon:
+                            {
+                                Image imgSrc = new Bitmap(128, 128);
+                                Graphics gSrc = Graphics.FromImage(imgSrc);
+                                List<PointF> polygon = new List<PointF>();
+                                //foreach (SvgUnit point in Polygon.Points)
+                                for (int n = 0; (n + 1) < Polygon.Points.Count; n += 2)
+                                {
+                                    polygon.Add(new PointF(Polygon.Points[n], Polygon.Points[n + 1]));
+                                }
+                                float MinX = polygon.Min(p => p.X);
+                                if (MinX > 5)
+                                    MinX -= 5;
+                                float MinY = polygon.Min(p=>p.Y);//用最小值求平移
+                                if (MinY > 5)
+                                    MinY -= 5;
+
+                                float MaxX = polygon.Max(p => p.X);
+                                float MaxY = polygon.Max(p => p.Y);//用最大值求缩放比例
+                                float MinL = Math.Max(Math.Abs(MaxX - MinX), Math.Abs(MaxY - MinY));
+                                float Scale = 0;
+                                if (MinL < 11.8)
+                                    Scale = 118 / MinL;
+                                else
+                                    Scale = MinL / 118;
+                                for (int n = 0; n < polygon.Count; n++)
+                                {
+                                    PointF item = polygon[n];
+                                    item.X -= MinX;
+                                    item.Y -= MinY;
+                                    item.X /= Scale;
+                                    item.Y /= Scale;
+                                    polygon[n] = item;
+                                }
+                                gSrc.DrawPolygon(new Pen(Brushes.Red, 2), polygon.ToArray());
+
+                                imgSrc.Save($@"{AppDomain.CurrentDomain.BaseDirectory}\{i.ToString()}.png");
+                                imageList.Images.Add(imgSrc);
+                                gSrc.Dispose();
+                            }
+                            break;
+
+                        case Svg.SvgRectangle Rectangle:
+                            {
+                                Image imgSrc = new Bitmap(128, 128);
+                                Graphics gSrc = Graphics.FromImage(imgSrc);
+                                float width = Rectangle.Bounds.Width;
+                                float height = Rectangle.Bounds.Height;
+                                float x = 5;
+                                float y = 5;
+                                float MinL = Math.Max(width, height);
+                                float Scale = 0;
+                                if (MinL < 11.8)
+                                    Scale = 118 / MinL;
+                                else
+                                    Scale = MinL / 118;
+                                width /= Scale;
+                                height /= Scale;
+                                gSrc.DrawRectangle(new Pen(Brushes.Red, 2), x, y, width, height);
+                                imgSrc.Save($@"{AppDomain.CurrentDomain.BaseDirectory}\{i.ToString()}.png");
+                                imageList.Images.Add(imgSrc);
+                                gSrc.Dispose();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                //gMide.Dispose();
+            }
+            this.lvwTU.View = View.LargeIcon;
+            this.lvwTU.LargeImageList = imageList;
+            this.lvwTU.BeginUpdate();
+            for (int i = 0; i < imageList.Images.Count; i++)
+            {
+                ListViewItem lvi = new ListViewItem();
+                lvi.ImageIndex = i;
+                lvi.Text = "item" + i;
+                this.lvwTU.Items.Add(lvi);
+            }
+            this.lvwTU.EndUpdate();
         }
 
         private void Item_MouseDown(object sender, MouseArg e)

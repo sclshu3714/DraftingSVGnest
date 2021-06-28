@@ -42,12 +42,14 @@ namespace NestingApp
             this.txtGAmutationrate = new System.Windows.Forms.ToolStripTextBox();
             this.checkPartinPart = new System.Windows.Forms.ToolStripMenuItem();
             this.checkExploreconcaveareas = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.skinSplitContainer1 = new CCWin.SkinControl.SkinSplitContainer();
             this.skinSplitContainer2 = new CCWin.SkinControl.SkinSplitContainer();
             this.picNestPath = new CCWin.SkinControl.SkinPictureBox();
-            this.pictConvertedImage = new CCWin.SkinControl.SkinPictureBox();
             this.skinPictureBox3 = new CCWin.SkinControl.SkinPictureBox();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.lvwTU = new CCWin.SkinControl.SkinListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tspMainTool.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer1)).BeginInit();
             this.skinSplitContainer1.Panel1.SuspendLayout();
@@ -58,7 +60,6 @@ namespace NestingApp
             this.skinSplitContainer2.Panel2.SuspendLayout();
             this.skinSplitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictConvertedImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
@@ -214,14 +215,22 @@ namespace NestingApp
             // checkPartinPart
             // 
             this.checkPartinPart.Name = "checkPartinPart";
-            this.checkPartinPart.Size = new System.Drawing.Size(224, 26);
+            this.checkPartinPart.Size = new System.Drawing.Size(182, 26);
             this.checkPartinPart.Text = "部件在部件中";
             // 
             // checkExploreconcaveareas
             // 
             this.checkExploreconcaveareas.Name = "checkExploreconcaveareas";
-            this.checkExploreconcaveareas.Size = new System.Drawing.Size(224, 26);
+            this.checkExploreconcaveareas.Size = new System.Drawing.Size(182, 26);
             this.checkExploreconcaveareas.Text = "探索凹面";
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Margin = new System.Windows.Forms.Padding(1, 25, 1, 25);
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 30);
+            this.toolStripProgressBar.Value = 50;
+            this.toolStripProgressBar.Visible = false;
             // 
             // skinSplitContainer1
             // 
@@ -232,7 +241,7 @@ namespace NestingApp
             // 
             // skinSplitContainer1.Panel1
             // 
-            this.skinSplitContainer1.Panel1.Controls.Add(this.pictConvertedImage);
+            this.skinSplitContainer1.Panel1.Controls.Add(this.lvwTU);
             // 
             // skinSplitContainer1.Panel2
             // 
@@ -271,18 +280,6 @@ namespace NestingApp
             this.picNestPath.TabIndex = 0;
             this.picNestPath.TabStop = false;
             // 
-            // pictConvertedImage
-            // 
-            this.pictConvertedImage.BackColor = System.Drawing.Color.Transparent;
-            this.pictConvertedImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictConvertedImage.Location = new System.Drawing.Point(0, 0);
-            this.pictConvertedImage.Name = "pictConvertedImage";
-            this.pictConvertedImage.Size = new System.Drawing.Size(209, 521);
-            this.pictConvertedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictConvertedImage.TabIndex = 1;
-            this.pictConvertedImage.TabStop = false;
-            this.pictConvertedImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictConvertedImage_MouseDown);
-            // 
             // skinPictureBox3
             // 
             this.skinPictureBox3.BackColor = System.Drawing.Color.Transparent;
@@ -294,13 +291,27 @@ namespace NestingApp
             this.skinPictureBox3.TabIndex = 1;
             this.skinPictureBox3.TabStop = false;
             // 
-            // toolStripProgressBar
+            // lvwTU
             // 
-            this.toolStripProgressBar.Margin = new System.Windows.Forms.Padding(1, 25, 1, 25);
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 30);
-            this.toolStripProgressBar.Value = 50;
-            this.toolStripProgressBar.Visible = false;
+            this.lvwTU.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.lvwTU.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvwTU.HideSelection = false;
+            this.lvwTU.Location = new System.Drawing.Point(0, 0);
+            this.lvwTU.Name = "lvwTU";
+            this.lvwTU.OwnerDraw = true;
+            this.lvwTU.Size = new System.Drawing.Size(209, 521);
+            this.lvwTU.TabIndex = 0;
+            this.lvwTU.UseCompatibleStateImageBehavior = false;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "选择";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "图形";
             // 
             // MainForm
             // 
@@ -326,7 +337,6 @@ namespace NestingApp
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer2)).EndInit();
             this.skinSplitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictConvertedImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -348,10 +358,12 @@ namespace NestingApp
         private System.Windows.Forms.ToolStripTextBox txtGAmutationrate;
         private System.Windows.Forms.ToolStripMenuItem checkPartinPart;
         private System.Windows.Forms.ToolStripMenuItem checkExploreconcaveareas;
-        private CCWin.SkinControl.SkinPictureBox pictConvertedImage;
         private CCWin.SkinControl.SkinPictureBox picNestPath;
         private CCWin.SkinControl.SkinPictureBox skinPictureBox3;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private CCWin.SkinControl.SkinListView lvwTU;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }
 
