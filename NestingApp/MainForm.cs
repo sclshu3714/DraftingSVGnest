@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace NestingApp
 {
     public partial class MainForm : CCSkinMain
     {
+       private List<NestPath> nestPaths = new List<NestPath>();
         //
         ///支持的最大图像大小
         ///
@@ -84,60 +86,7 @@ namespace NestingApp
 
         #endregion
 
-        public List<NestPath> transferSvgIntoPolygonsSvg(SvgDocument document)
-        {
-            List<NestPath> nestPaths = new List<NestPath>();
-            foreach (SvgElement item in document.Children)
-            {
-                AddNestPath(item, ref nestPaths);
-            }
-            return nestPaths;
-        }
-
-        public void AddNestPath(SvgElement element, ref List<NestPath> nestPaths)
-        {
-            switch (element)
-            {
-                case Svg.SvgGroup Group:
-                    {
-                        foreach (SvgElement node in Group.Nodes.Where(nd => nd is SvgElement))
-                            AddNestPath(node, ref nestPaths);
-                    }
-                    break;
-                case Svg.SvgPolygon Polygon:
-                    NestPath polygon = new NestPath();
-                    foreach (SvgUnit point in Polygon.Points)
-                    {
-                        string[] s = point.Value.ToString().Split('.');
-                        double x = Convert.ToDouble(s[0]);
-                        double y = Convert.ToDouble(s[1]);
-                        polygon.add(x, y);
-                    }
-                    polygon.bid = nestPaths.Count;
-                    polygon.setRotation(4);
-                    nestPaths.Add(polygon);
-                    break;
-
-                case Svg.SvgRectangle Rectangle:
-                    {
-                        double width = Rectangle.Bounds.Width;
-                        double height = Rectangle.Bounds.Height;
-                        double x = Rectangle.Bounds.X;
-                        double y = Rectangle.Bounds.Y;
-                        NestPath rect = new NestPath();
-                        rect.add(x, y);
-                        rect.add(x + width, y);
-                        rect.add(x + width, y + height);
-                        rect.add(x, y + height);
-                        rect.bid = nestPaths.Count;
-                        rect.setRotation(4);
-                        nestPaths.Add(rect);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+        
 
         /// <summary>
         /// 开始嵌套计算
@@ -166,14 +115,14 @@ namespace NestingApp
             Task.Run(new Action(()=>
             {
                 NestPath bin = new NestPath();
-                double binWidth = picNestPath.Width;
-                double binHeight = picNestPath.Height;
-                bin.add(0, 0);
-                bin.add(binWidth, 0);
+                double binWidth = picNestPath.Width - 10;
+                double binHeight = picNestPath.Height - 10;
+                bin.add(5, 5);
+                bin.add(binWidth, 5);
                 bin.add(binWidth, binHeight);
-                bin.add(0, binHeight);
+                bin.add(5, binHeight);
                 Console.WriteLine("Bin Size : Width = " + binWidth + " Height=" + binHeight);
-                var nestPaths = SvgUtil.transferSvgIntoPolygons("test.xml");
+                //var nestPathsA = SvgUtil.transferSvgIntoPolygons("test.xml");
                 //var nestPaths = transferSvgIntoPolygonsSvg(document);
                 //Console.WriteLine("Reading File = test.xml");
                 Console.WriteLine("No of parts = " + nestPaths.Count);
@@ -194,7 +143,7 @@ namespace NestingApp
                     if (documentOut.HasChildren())
                     {
                         this.Invoke(new Action(() => {
-                            this.picNestPath.Image = documentOut.Draw();
+                            this.picNestPath.Image = documentOut.Draw(); ;
                         }));
                     }
                 }
@@ -220,7 +169,7 @@ namespace NestingApp
         /// <param name="e"></param>
         private void btnUpload_Click(object sender, EventArgs e)
         {
-            //IMaximumSize = new Size(this.pictConvertedImage.Width, this.pictConvertedImage.Height);
+            IMaximumSize = new Size(this.picNestPath.Width - 10, this.picNestPath.Height - 10);
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = $"SVG文件(*.svg)|*.svg|XML文件(*.xml)|*.xml";
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -228,130 +177,288 @@ namespace NestingApp
                 string FileName = dialog.FileName;
                 if (dialog.FilterIndex == 1)
                     document = GetSvgDocument(FileName);
-                else if (dialog.FilterIndex == 2)
-                {
-                    XmlDocument xmlDocument = new XmlDocument();
-                    xmlDocument.Load(FileName);
-                    document = GetSvgDocument(xmlDocument);
-                }
-                SetLargeImageList();
-                //foreach (SvgElement item in document.Children)
+                else
+                    return;
+                //else if (dialog.FilterIndex == 2)
                 //{
-                //    if (item is Svg.SvgGroup && item.Nodes.Count > 0)
-                //    {
-                //        foreach (SvgElement node in item.Nodes.Where(nd => nd is SvgElement))
-                //        {
-                //            //node.Color = new SvgColourServer(Color.Red);
-                //            GetChild(node, node.ID, "A", Color.Red.ToArgb().ToString());
-                //           //new SvgColourServer(Color.Lime);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        //item.Color = new SvgColourServer(Color.Red);
-                //        GetChild(item, item.ID, "A", Color.Red.ToArgb().ToString());
-                //    }
+                //    XmlDocument xmlDocument = new XmlDocument();
+                //    xmlDocument.Load(FileName);
+                //    document = GetSvgDocument(xmlDocument);
                 //}
-                //if (document != null)
-                //pictConvertedImage.Image = document.Draw();
+                if (document != null)
+                {
+                    this.picNestPath.Margin = new Padding(3);
+                    this.picNestPath.Image = document.Draw();
+                    ImageList imageList = new ImageList();
+                    imageList.ImageSize = new Size(128, 128);
+                    //SetLargeImageList(ref imageList);
+                    transferSvgIntoPolygonsSvg(document, ref imageList);
+                    this.lvwTU.View = View.LargeIcon;
+                    this.lvwTU.LargeImageList = imageList;
+                    this.lvwTU.BeginUpdate();
+                    for (int n = 0; n < imageList.Images.Count; n++)
+                    {
+                        ListViewItem lvi = new ListViewItem();
+                        lvi.ImageIndex = n;
+                        lvi.Text = Convert.ToString(nestPaths[n].bid.ToString());
+                        lvi.Checked = true;
+                        this.lvwTU.Items.Add(lvi);
+                    }
+                    this.lvwTU.EndUpdate();
+                    this.lvwTU.CheckBoxes = true;
+                }
+            }
+        }
+        public List<NestPath> transferSvgIntoPolygonsSvg(SvgDocument document, ref ImageList imageList)
+        {
+            nestPaths = new List<NestPath>();
+            foreach (SvgElement item in document.Children)
+            {
+                AddNestPath(item, ref nestPaths,ref imageList);
+            }
+            return nestPaths;
+        }
+        public void AddNestPath(SvgElement element, ref List<NestPath> nestPaths, ref ImageList imageList)
+        {
+            switch (element)
+            {
+                case Svg.SvgGroup Group:
+                    {
+                        foreach (SvgElement node in Group.Nodes.Where(nd => nd is SvgElement))
+                            AddNestPath(node, ref nestPaths,ref imageList);
+                        foreach (SvgElement node in Group.Children.Where(nd => nd is SvgElement))
+                            AddNestPath(node, ref nestPaths, ref imageList);
+                    }
+                    break;
+                case Svg.SvgPath Path:
+                    {
+                        NestPath nPath = new NestPath();
+                        for (int n = 0; n < Path.PathData.Count; n += 1)
+                        {
+                            double x = Path.PathData[n].Start.X;
+                            double y = Path.PathData[n].Start.Y;
+                            nPath.add(x, y);
+                        }
+                        nPath.bid = nestPaths.Count;
+                        nPath.setRotation(4);
+                        nestPaths.Add(nPath);
+                    }
+                    break;
+                case Svg.SvgPolygon Polygon:
+                    {
+                        NestPath polygon = new NestPath();
+                        List<PointF> polygonf = new List<PointF>();
+                        for (int n = 0; (n + 1) < Polygon.Points.Count; n += 2)
+                        {
+                            double x = Polygon.Points[n];
+                            double y = Polygon.Points[n + 1];
+                            polygon.add(x, y);
+                            polygonf.Add(new PointF(Polygon.Points[n], Polygon.Points[n + 1]));
+                        }
+                        polygon.bid = nestPaths.Count;
+                        polygon.setRotation(4);
+                        nestPaths.Add(polygon);
+
+                        Image imgSrc = new Bitmap(128, 128);
+                        imgSrc.Tag = string.IsNullOrEmpty(element.ID) ? $"{nestPaths.Count}" : element.ID;
+                        Graphics gSrc = Graphics.FromImage(imgSrc);
+                        float MinX = polygonf.Min(p => p.X);
+                        if (MinX > 5)
+                            MinX -= 5;
+                        float MinY = polygonf.Min(p => p.Y);//用最小值求平移
+                        if (MinY > 5)
+                            MinY -= 5;
+
+                        float MaxX = polygonf.Max(p => p.X);
+                        float MaxY = polygonf.Max(p => p.Y);//用最大值求缩放比例
+                        float MinL = Math.Max(Math.Abs(MaxX - MinX), Math.Abs(MaxY - MinY));
+                        float Scale = 0;
+                        if (MinL < 11.8)
+                            Scale = 118 / MinL;
+                        else
+                            Scale = MinL / 118;
+                        for (int n = 0; n < polygonf.Count; n++)
+                        {
+                            PointF item = polygonf[n];
+                            item.X -= MinX;
+                            item.Y -= MinY;
+                            item.X /= Scale;
+                            item.Y /= Scale;
+                            polygonf[n] = item;
+                        }
+                        gSrc.DrawPolygon(new Pen(Brushes.Red, 2), polygonf.ToArray());
+                        imageList.Images.Add(imgSrc);
+                        gSrc.Dispose();
+                    }
+                    break;
+                case Svg.SvgRectangle Rectangle:
+                    {
+                        double width = Rectangle.Bounds.Width;
+                        double height = Rectangle.Bounds.Height;
+                        double x = Rectangle.Bounds.X;
+                        double y = Rectangle.Bounds.Y;
+                        NestPath rect = new NestPath();
+                        rect.add(x, y);
+                        rect.add(x + width, y);
+                        rect.add(x + width, y + height);
+                        rect.add(x, y + height);
+                        rect.bid = nestPaths.Count;
+                        rect.setRotation(4);
+                        nestPaths.Add(rect);
+
+                        Image imgSrc = new Bitmap(128, 128);
+                        imgSrc.Tag = string.IsNullOrEmpty(element.ID) ? $"{nestPaths.Count}" : element.ID;
+                        Graphics gSrc = Graphics.FromImage(imgSrc);
+                        x = 5;
+                        y = 5;
+                        double MinL = Math.Max(width, height);
+                        double Scale = 0;
+                        if (MinL < 11.8)
+                            Scale = 118 / MinL;
+                        else
+                            Scale = MinL / 118;
+                        width /= Scale;
+                        height /= Scale;
+                        gSrc.DrawRectangle(new Pen(Brushes.Red, 2), (float)x, (float)y, (float)width, (float)height);
+                        imageList.Images.Add(imgSrc);
+                        gSrc.Dispose();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
-
-        public void SetLargeImageList() {
-            ImageList imageList = new ImageList();
-            imageList.ImageSize = new Size(128, 128);
-            if (document != null)
+        public void SetLargeImageList(ref ImageList imageList)
+        {
+            int i = 0;
+            nestPaths = new List<NestPath>();
+            foreach (SvgElement element in document.Children)
             {
-                //Graphics gMide = this.picNestPath.CreateGraphics();
-                int i = 0;
-                foreach (SvgElement element in document.Children) {
-                    i += 1;
-                    switch (element)
-                    {
-                        case Svg.SvgGroup Group:
-                            break;
-                        case Svg.SvgPolygon Polygon:
+                switch (element)
+                {
+                    case Svg.SvgGroup Group:
+                        break;
+
+                    case Svg.SvgPath sPath:
+                        {
+                            Image imgSrc = new Bitmap(128, 128);
+                            imgSrc.Tag = string.IsNullOrEmpty(element.ID) ? $"{i}" : element.ID;
+                            Graphics gSrc = Graphics.FromImage(imgSrc);
+                            GraphicsPath gpath = new GraphicsPath();
+                            NestPath npPolygon = new NestPath();
+                            foreach (var item in sPath.PathData)
                             {
-                                Image imgSrc = new Bitmap(128, 128);
-                                Graphics gSrc = Graphics.FromImage(imgSrc);
-                                List<PointF> polygon = new List<PointF>();
-                                //foreach (SvgUnit point in Polygon.Points)
-                                for (int n = 0; (n + 1) < Polygon.Points.Count; n += 2)
-                                {
-                                    polygon.Add(new PointF(Polygon.Points[n], Polygon.Points[n + 1]));
-                                }
-                                float MinX = polygon.Min(p => p.X);
-                                if (MinX > 5)
-                                    MinX -= 5;
-                                float MinY = polygon.Min(p=>p.Y);//用最小值求平移
-                                if (MinY > 5)
-                                    MinY -= 5;
-
-                                float MaxX = polygon.Max(p => p.X);
-                                float MaxY = polygon.Max(p => p.Y);//用最大值求缩放比例
-                                float MinL = Math.Max(Math.Abs(MaxX - MinX), Math.Abs(MaxY - MinY));
-                                float Scale = 0;
-                                if (MinL < 11.8)
-                                    Scale = 118 / MinL;
-                                else
-                                    Scale = MinL / 118;
-                                for (int n = 0; n < polygon.Count; n++)
-                                {
-                                    PointF item = polygon[n];
-                                    item.X -= MinX;
-                                    item.Y -= MinY;
-                                    item.X /= Scale;
-                                    item.Y /= Scale;
-                                    polygon[n] = item;
-                                }
-                                gSrc.DrawPolygon(new Pen(Brushes.Red, 2), polygon.ToArray());
-
-                                imgSrc.Save($@"{AppDomain.CurrentDomain.BaseDirectory}\{i.ToString()}.png");
-                                imageList.Images.Add(imgSrc);
-                                gSrc.Dispose();
+                                gpath.AddLine(item.Start, item.End);
+                                npPolygon.add(item.Start.X, item.Start.Y);
+                                npPolygon.add(item.End.X, item.End.Y);
                             }
-                            break;
+                            npPolygon.bid = i;
+                            npPolygon.setRotation(4);
+                            nestPaths.Add(npPolygon);
 
-                        case Svg.SvgRectangle Rectangle:
+                            gSrc.DrawPath(new Pen(Brushes.Red, 2), gpath);
+                            imageList.Images.Add(imgSrc);
+                            gSrc.Dispose();
+                        }
+                        i += 1;
+                        break;
+                    case Svg.SvgPolygon Polygon:
+                        {
+                            Image imgSrc = new Bitmap(128, 128);
+                            imgSrc.Tag = string.IsNullOrEmpty(element.ID) ? $"{i}" : element.ID;
+                            Graphics gSrc = Graphics.FromImage(imgSrc);
+                            List<PointF> polygon = new List<PointF>();
+                            NestPath npPolygon = new NestPath();
+                            for (int n = 0; (n + 1) < Polygon.Points.Count; n += 2)
                             {
-                                Image imgSrc = new Bitmap(128, 128);
-                                Graphics gSrc = Graphics.FromImage(imgSrc);
-                                float width = Rectangle.Bounds.Width;
-                                float height = Rectangle.Bounds.Height;
-                                float x = 5;
-                                float y = 5;
-                                float MinL = Math.Max(width, height);
-                                float Scale = 0;
-                                if (MinL < 11.8)
-                                    Scale = 118 / MinL;
-                                else
-                                    Scale = MinL / 118;
-                                width /= Scale;
-                                height /= Scale;
-                                gSrc.DrawRectangle(new Pen(Brushes.Red, 2), x, y, width, height);
-                                imgSrc.Save($@"{AppDomain.CurrentDomain.BaseDirectory}\{i.ToString()}.png");
-                                imageList.Images.Add(imgSrc);
-                                gSrc.Dispose();
+                                polygon.Add(new PointF(Polygon.Points[n], Polygon.Points[n + 1]));
+                                npPolygon.add(Polygon.Points[n], Polygon.Points[n + 1]);
                             }
-                            break;
-                        default:
-                            break;
-                    }
+                            npPolygon.bid = i;
+                            npPolygon.setRotation(4);
+                            nestPaths.Add(npPolygon);
+
+                            float MinX = polygon.Min(p => p.X);
+                            if (MinX > 5)
+                                MinX -= 5;
+                            float MinY = polygon.Min(p => p.Y);//用最小值求平移
+                            if (MinY > 5)
+                                MinY -= 5;
+
+                            float MaxX = polygon.Max(p => p.X);
+                            float MaxY = polygon.Max(p => p.Y);//用最大值求缩放比例
+                            float MinL = Math.Max(Math.Abs(MaxX - MinX), Math.Abs(MaxY - MinY));
+                            float Scale = 0;
+                            if (MinL < 11.8)
+                                Scale = 118 / MinL;
+                            else
+                                Scale = MinL / 118;
+                            for (int n = 0; n < polygon.Count; n++)
+                            {
+                                PointF item = polygon[n];
+                                item.X -= MinX;
+                                item.Y -= MinY;
+                                item.X /= Scale;
+                                item.Y /= Scale;
+                                polygon[n] = item;
+                            }
+                            gSrc.DrawPolygon(new Pen(Brushes.Red, 2), polygon.ToArray());
+                            imageList.Images.Add(imgSrc);
+                            gSrc.Dispose();
+                        }
+                        i += 1;
+                        break;
+
+                    case Svg.SvgRectangle Rectangle:
+                        {
+                            Image imgSrc = new Bitmap(128, 128);
+                            imgSrc.Tag = string.IsNullOrEmpty(element.ID) ? $"{i}" : element.ID;
+                            Graphics gSrc = Graphics.FromImage(imgSrc);
+                            float width = Rectangle.Bounds.Width;
+                            float height = Rectangle.Bounds.Height;
+                            NestPath rect = new NestPath();
+                            rect.add(Rectangle.Bounds.X, Rectangle.Bounds.Y);
+                            rect.add(Rectangle.Bounds.X + width, Rectangle.Bounds.Y);
+                            rect.add(Rectangle.Bounds.X + width, Rectangle.Bounds.Y + height);
+                            rect.add(Rectangle.Bounds.X, Rectangle.Bounds.Y + height);
+                            rect.bid = i;
+                            rect.setRotation(4);
+                            nestPaths.Add(rect);
+
+                            float x = 5;
+                            float y = 5;
+                            float MinL = Math.Max(width, height);
+                            float Scale = 0;
+                            if (MinL < 11.8)
+                                Scale = 118 / MinL;
+                            else
+                                Scale = MinL / 118;
+                            width /= Scale;
+                            height /= Scale;
+                            gSrc.DrawRectangle(new Pen(Brushes.Red, 2), x, y, width, height);
+                            imageList.Images.Add(imgSrc);
+                            gSrc.Dispose();
+                        }
+                        i += 1;
+                        break;
+                    default:
+                        break;
                 }
-                //gMide.Dispose();
             }
             this.lvwTU.View = View.LargeIcon;
             this.lvwTU.LargeImageList = imageList;
             this.lvwTU.BeginUpdate();
-            for (int i = 0; i < imageList.Images.Count; i++)
+            for (int n = 0; n < imageList.Images.Count; n++)
             {
                 ListViewItem lvi = new ListViewItem();
-                lvi.ImageIndex = i;
-                lvi.Text = "item" + i;
+                lvi.ImageIndex = n;
+                lvi.Text = Convert.ToString(nestPaths[n].bid.ToString());
+                lvi.Checked = true;
                 this.lvwTU.Items.Add(lvi);
             }
             this.lvwTU.EndUpdate();
+            this.lvwTU.CheckBoxes = true;
         }
 
         private void Item_MouseDown(object sender, MouseArg e)

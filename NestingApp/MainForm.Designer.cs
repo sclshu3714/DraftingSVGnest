@@ -44,12 +44,12 @@ namespace NestingApp
             this.checkExploreconcaveareas = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.skinSplitContainer1 = new CCWin.SkinControl.SkinSplitContainer();
-            this.skinSplitContainer2 = new CCWin.SkinControl.SkinSplitContainer();
-            this.picNestPath = new CCWin.SkinControl.SkinPictureBox();
-            this.skinPictureBox3 = new CCWin.SkinControl.SkinPictureBox();
             this.lvwTU = new CCWin.SkinControl.SkinListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.skinSplitContainer2 = new CCWin.SkinControl.SkinSplitContainer();
+            this.skinPictureBox3 = new CCWin.SkinControl.SkinPictureBox();
+            this.picNestPath = new CCWin.SkinControl.SkinPictureBox();
             this.tspMainTool.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer1)).BeginInit();
             this.skinSplitContainer1.Panel1.SuspendLayout();
@@ -59,8 +59,8 @@ namespace NestingApp
             this.skinSplitContainer2.Panel1.SuspendLayout();
             this.skinSplitContainer2.Panel2.SuspendLayout();
             this.skinSplitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
             this.SuspendLayout();
             // 
             // tspMainTool
@@ -250,6 +250,33 @@ namespace NestingApp
             this.skinSplitContainer1.SplitterDistance = 209;
             this.skinSplitContainer1.TabIndex = 1;
             // 
+            // lvwTU
+            // 
+            this.lvwTU.AllowColumnReorder = true;
+            this.lvwTU.CheckBoxes = true;
+            this.lvwTU.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.lvwTU.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvwTU.FullRowSelect = true;
+            this.lvwTU.GridLines = true;
+            this.lvwTU.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvwTU.HideSelection = false;
+            this.lvwTU.Location = new System.Drawing.Point(0, 0);
+            this.lvwTU.Name = "lvwTU";
+            this.lvwTU.OwnerDraw = true;
+            this.lvwTU.Size = new System.Drawing.Size(209, 521);
+            this.lvwTU.TabIndex = 0;
+            this.lvwTU.UseCompatibleStateImageBehavior = false;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "选择";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "图形";
+            // 
             // skinSplitContainer2
             // 
             this.skinSplitContainer2.CollapsePanel = CCWin.SkinControl.CollapsePanel.Panel2;
@@ -269,17 +296,6 @@ namespace NestingApp
             this.skinSplitContainer2.SplitterDistance = 698;
             this.skinSplitContainer2.TabIndex = 0;
             // 
-            // picNestPath
-            // 
-            this.picNestPath.BackColor = System.Drawing.Color.Transparent;
-            this.picNestPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picNestPath.Location = new System.Drawing.Point(0, 0);
-            this.picNestPath.Name = "picNestPath";
-            this.picNestPath.Size = new System.Drawing.Size(698, 521);
-            this.picNestPath.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picNestPath.TabIndex = 0;
-            this.picNestPath.TabStop = false;
-            // 
             // skinPictureBox3
             // 
             this.skinPictureBox3.BackColor = System.Drawing.Color.Transparent;
@@ -291,27 +307,15 @@ namespace NestingApp
             this.skinPictureBox3.TabIndex = 1;
             this.skinPictureBox3.TabStop = false;
             // 
-            // lvwTU
+            // picNestPath
             // 
-            this.lvwTU.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.lvwTU.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvwTU.HideSelection = false;
-            this.lvwTU.Location = new System.Drawing.Point(0, 0);
-            this.lvwTU.Name = "lvwTU";
-            this.lvwTU.OwnerDraw = true;
-            this.lvwTU.Size = new System.Drawing.Size(209, 521);
-            this.lvwTU.TabIndex = 0;
-            this.lvwTU.UseCompatibleStateImageBehavior = false;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "选择";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "图形";
+            this.picNestPath.BackColor = System.Drawing.Color.Transparent;
+            this.picNestPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picNestPath.Location = new System.Drawing.Point(0, 0);
+            this.picNestPath.Name = "picNestPath";
+            this.picNestPath.Size = new System.Drawing.Size(698, 521);
+            this.picNestPath.TabIndex = 0;
+            this.picNestPath.TabStop = false;
             // 
             // MainForm
             // 
@@ -336,8 +340,8 @@ namespace NestingApp
             this.skinSplitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer2)).EndInit();
             this.skinSplitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -358,12 +362,12 @@ namespace NestingApp
         private System.Windows.Forms.ToolStripTextBox txtGAmutationrate;
         private System.Windows.Forms.ToolStripMenuItem checkPartinPart;
         private System.Windows.Forms.ToolStripMenuItem checkExploreconcaveareas;
-        private CCWin.SkinControl.SkinPictureBox picNestPath;
         private CCWin.SkinControl.SkinPictureBox skinPictureBox3;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private CCWin.SkinControl.SkinListView lvwTU;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private CCWin.SkinControl.SkinPictureBox picNestPath;
     }
 }
 
