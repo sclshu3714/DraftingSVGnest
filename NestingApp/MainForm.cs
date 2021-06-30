@@ -166,7 +166,8 @@ namespace NestingApp
         /// <param name="e"></param>
         private void btnDownload_Click(object sender, EventArgs e)
         {
-
+            string sss = $"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg";
+            Process.Start(sss);
         }
 
         /// <summary>

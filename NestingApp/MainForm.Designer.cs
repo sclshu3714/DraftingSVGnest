@@ -132,7 +132,7 @@ namespace NestingApp
             // 
             // btnUpload
             // 
-            this.btnUpload.Image = ((System.Drawing.Image)(resources.GetObject("btnUpload.Image")));
+            this.btnUpload.Image = global::NestingApp.Properties.Resources.ShadowPalace;
             this.btnUpload.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(73, 77);
@@ -143,7 +143,7 @@ namespace NestingApp
             // 
             // btnStart
             // 
-            this.btnStart.Image = ((System.Drawing.Image)(resources.GetObject("btnStart.Image")));
+            this.btnStart.Image = global::NestingApp.Properties.Resources.image;
             this.btnStart.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(77, 77);
@@ -154,14 +154,13 @@ namespace NestingApp
             // 
             // btnDownload
             // 
-            this.btnDownload.Image = ((System.Drawing.Image)(resources.GetObject("btnDownload.Image")));
+            this.btnDownload.Image = global::NestingApp.Properties.Resources.aio_setting_normal;
             this.btnDownload.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(73, 77);
-            this.btnDownload.Text = "下载SVG";
+            this.btnDownload.Text = "导出文件";
             this.btnDownload.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnDownload.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnDownload.Visible = false;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // btnSetting
@@ -179,7 +178,7 @@ namespace NestingApp
             this.txtGAmutationrate,
             this.checkPartinPart,
             this.checkExploreconcaveareas});
-            this.btnSetting.Image = ((System.Drawing.Image)(resources.GetObject("btnSetting.Image")));
+            this.btnSetting.Image = global::NestingApp.Properties.Resources.set_icon;
             this.btnSetting.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(58, 77);
@@ -371,7 +370,7 @@ namespace NestingApp
             // 
             // tsbSelectAll
             // 
-            this.tsbSelectAll.Image = ((System.Drawing.Image)(resources.GetObject("tsbSelectAll.Image")));
+            this.tsbSelectAll.Image = global::NestingApp.Properties.Resources.aio_head_normal;
             this.tsbSelectAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSelectAll.Name = "tsbSelectAll";
             this.tsbSelectAll.Size = new System.Drawing.Size(63, 24);
@@ -380,7 +379,7 @@ namespace NestingApp
             // 
             // tsbReSelectAll
             // 
-            this.tsbReSelectAll.Image = ((System.Drawing.Image)(resources.GetObject("tsbReSelectAll.Image")));
+            this.tsbReSelectAll.Image = global::NestingApp.Properties.Resources.sysbtn_restore_hover;
             this.tsbReSelectAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbReSelectAll.Name = "tsbReSelectAll";
             this.tsbReSelectAll.Size = new System.Drawing.Size(63, 24);

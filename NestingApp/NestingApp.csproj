@@ -97,6 +97,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -117,6 +118,93 @@
       <Project>{b396f5bf-95f6-48dd-adce-2af4ffcb7350}</Project>
       <Name>NestingLibPort</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_head_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_setting_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_setting_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_setting_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_setting_white_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_setting_white_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_setting_white_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\allbtn_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\allbtn_highlight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_close_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_close_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_close_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu_btn_highlight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu_btn_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\set_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ShadowPalace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_close_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_close_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_close_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_max_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_max_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_max_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_min_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_min_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_min_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_restore_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_restore_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sysbtn_restore_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
