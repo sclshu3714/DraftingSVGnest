@@ -125,15 +125,22 @@ namespace NestingApp
                 //var nestPathsA = SvgUtil.transferSvgIntoPolygons("test.xml");
                 //var nestPaths = transferSvgIntoPolygonsSvg(document);
                 //Console.WriteLine("Reading File = test.xml");
-                Console.WriteLine("No of parts = " + nestPaths.Count);
+                List<NestPath> paths = GetSelectNestPaths();
+                Console.WriteLine("No of parts = " + paths.Count);
                 Config config = new Config();
                 Console.WriteLine("Configuring Nest");
+                //Config.CLIIPER_SCALE = Convert.ToInt32(this.txtPart.Text.Trim());
+                Config.CURVE_TOLERANCE = Convert.ToDouble(this.txtCurve.Text.Trim());
                 config.SPACING = Convert.ToInt32(this.txtSpace.Text.Trim());
-                Nest nest = new Nest(bin, nestPaths, config, 1);
+                config.POPULATION_SIZE = Convert.ToInt32(this.txtGAmutationrate.Text.Trim());
+                config.MUTATION_RATE = Convert.ToInt32(this.txtGApopulation.Text.Trim());
+                //config.CONCAVE = this.checkPartinPart.Checked;
+                config.USE_HOLE = this.checkExploreconcaveareas.Checked;
+                Nest nest = new Nest(bin, paths, config, 1);
                 Console.WriteLine("Performing Nest");
                 List<List<Placement>> appliedPlacement = nest.startNest();
                 Console.WriteLine("Nesting Completed");
-                var svgPolygons = SvgUtil.svgGenerator(nestPaths, appliedPlacement, binWidth, binHeight);
+                var svgPolygons = SvgUtil.svgGenerator(paths, appliedPlacement, binWidth, binHeight);
                 Console.WriteLine("Converted to SVG format");
                 SvgUtil.saveSvgFile(svgPolygons, "output.svg");
                 Console.WriteLine("Saved svg file..Opening File");
@@ -189,23 +196,23 @@ namespace NestingApp
                 {
                     this.picNestPath.Margin = new Padding(3);
                     this.picNestPath.Image = document.Draw();
-                    ImageList imageList = new ImageList();
-                    imageList.ImageSize = new Size(128, 128);
+                    //ImageList imageList = new ImageList();
+                    //imageList.ImageSize = new Size(128, 128);
                     //SetLargeImageList(ref imageList);
-                    transferSvgIntoPolygonsSvg(document, ref imageList);
-                    this.lvwTU.View = View.LargeIcon;
-                    this.lvwTU.LargeImageList = imageList;
+                    imgList.Images.Clear();
+                    transferSvgIntoPolygonsSvg(document, ref imgList);
+                    //this.lvwTU.View = View.LargeIcon;
+                    //this.lvwTU.LargeImageList = imageList;
+
+                    List<ListViewItem> listViews = new List<ListViewItem>();
                     this.lvwTU.BeginUpdate();
-                    for (int n = 0; n < imageList.Images.Count; n++)
+                    for (int n = 0; n < imgList.Images.Count; n++)
                     {
-                        ListViewItem lvi = new ListViewItem();
-                        lvi.ImageIndex = n;
-                        lvi.Text = Convert.ToString(nestPaths[n].bid.ToString());
-                        lvi.Checked = true;
-                        this.lvwTU.Items.Add(lvi);
+                        ListViewItem lvi = new ListViewItem(Convert.ToString(nestPaths[n].bid.ToString()), n);
+                        listViews.Add(lvi);
                     }
+                    this.lvwTU.Items.AddRange(listViews.ToArray());
                     this.lvwTU.EndUpdate();
-                    this.lvwTU.CheckBoxes = true;
                 }
             }
         }
@@ -446,8 +453,8 @@ namespace NestingApp
                         break;
                 }
             }
-            this.lvwTU.View = View.LargeIcon;
-            this.lvwTU.LargeImageList = imageList;
+            //this.lvwTU.View = View.LargeIcon;
+            //this.lvwTU.LargeImageList = imageList;
             this.lvwTU.BeginUpdate();
             for (int n = 0; n < imageList.Images.Count; n++)
             {
@@ -566,6 +573,62 @@ namespace NestingApp
         private void pictConvertedImage_MouseDown(object sender, MouseEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// 全选
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsbSelectAll_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.lvwTU.Items)
+            {
+                item.Checked = true;
+            }
+        }
+        /// <summary>
+        /// 反选
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsbReSelectAll_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.lvwTU.Items)
+            {
+                item.Checked = !item.Checked;
+            }
+        }
+
+        public List<NestPath> GetSelectNestPaths()
+        {
+            List<NestPath> SelectNestPaths = new List<NestPath>();
+            this.Invoke(new Action(() =>
+            {
+                int index = 0;
+                this.lvwTUS.Items.Clear();
+                foreach (ListViewItem item in this.lvwTU.Items)
+                {
+                    if (item.Checked)
+                    {
+                        SelectNestPaths.Add(nestPaths.ElementAt(index));
+                        ListViewItem lvi = new ListViewItem(Convert.ToString(index + 1), index);
+                        this.lvwTUS.Items.Add(lvi);
+                    }
+                    index++;
+                }
+            }));
+            return SelectNestPaths;
+        }
+
+        private void checkPartinPart_Click(object sender, EventArgs e)
+        {
+            this.checkPartinPart.Checked = !this.checkPartinPart.Checked;
+        }
+
+        private void checkExploreconcaveareas_Click(object sender, EventArgs e)
+        {
+            this.checkPartinPart.Checked = !this.checkPartinPart.Checked;
         }
     }
 }
