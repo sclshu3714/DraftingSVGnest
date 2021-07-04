@@ -649,21 +649,29 @@ namespace NestingApp
         {
             if (this.WindowState == System.Windows.Forms.FormWindowState.Minimized)
             {
-                this.skin.Show();
+                this.skin.Show(); 
+                if (this.skin.Width > 0 && this.skin.Height > 0)
+                    this.Show();
                 this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+                this.notifyIcon.Visible = false;
             }
         }
 
         private void 显示主界面ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.Visible)
+            if (this.skin.Visible)
             {
                 this.skin.Hide();
+                if (this.skin.Width > 0 && this.skin.Height > 0)
+                    this.Hide();
             }
             else
             {
                 this.skin.Show();
+                if (this.skin.Width > 0 && this.skin.Height > 0)
+                    this.Show();
                 this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+                this.notifyIcon.Visible = false;
             }
         }
 
