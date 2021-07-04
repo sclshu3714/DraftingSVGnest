@@ -59,6 +59,10 @@ namespace NestingApp
             this.picNestPath = new CCWin.SkinControl.SkinPictureBox();
             this.lvwTUS = new System.Windows.Forms.ListView();
             this.skinPictureBox3 = new CCWin.SkinControl.SkinPictureBox();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.显示主界面ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tspMainTool.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer1)).BeginInit();
             this.skinSplitContainer1.Panel1.SuspendLayout();
@@ -71,6 +75,7 @@ namespace NestingApp
             this.skinSplitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // tspMainTool
@@ -189,7 +194,7 @@ namespace NestingApp
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 26);
             this.toolStripMenuItem1.Text = "间隔：";
             // 
             // txtSpace
@@ -203,7 +208,7 @@ namespace NestingApp
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(182, 26);
             this.toolStripMenuItem2.Text = "公差：";
             // 
             // txtCurve
@@ -217,7 +222,7 @@ namespace NestingApp
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(182, 26);
             this.toolStripMenuItem3.Text = "旋转：";
             // 
             // txtPart
@@ -231,7 +236,7 @@ namespace NestingApp
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(182, 26);
             this.toolStripMenuItem4.Text = "GA入口：";
             // 
             // txtGApopulation
@@ -245,7 +250,7 @@ namespace NestingApp
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(182, 26);
             this.toolStripMenuItem5.Text = "GA突变率：";
             // 
             // txtGAmutationrate
@@ -259,14 +264,14 @@ namespace NestingApp
             // checkPartinPart
             // 
             this.checkPartinPart.Name = "checkPartinPart";
-            this.checkPartinPart.Size = new System.Drawing.Size(224, 26);
+            this.checkPartinPart.Size = new System.Drawing.Size(182, 26);
             this.checkPartinPart.Text = "部件在部件中";
             this.checkPartinPart.Click += new System.EventHandler(this.checkPartinPart_Click);
             // 
             // checkExploreconcaveareas
             // 
             this.checkExploreconcaveareas.Name = "checkExploreconcaveareas";
-            this.checkExploreconcaveareas.Size = new System.Drawing.Size(224, 26);
+            this.checkExploreconcaveareas.Size = new System.Drawing.Size(182, 26);
             this.checkExploreconcaveareas.Text = "探索凹面";
             this.checkExploreconcaveareas.Click += new System.EventHandler(this.checkExploreconcaveareas_Click);
             // 
@@ -439,6 +444,37 @@ namespace NestingApp
             this.skinPictureBox3.TabIndex = 1;
             this.skinPictureBox3.TabStop = false;
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "嵌套";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.显示主界面ToolStripMenuItem,
+            this.退出ToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(154, 52);
+            // 
+            // 显示主界面ToolStripMenuItem
+            // 
+            this.显示主界面ToolStripMenuItem.Name = "显示主界面ToolStripMenuItem";
+            this.显示主界面ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.显示主界面ToolStripMenuItem.Text = "显示主界面";
+            this.显示主界面ToolStripMenuItem.Click += new System.EventHandler(this.显示主界面ToolStripMenuItem_Click);
+            // 
+            // 退出ToolStripMenuItem
+            // 
+            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.退出ToolStripMenuItem.Text = "退出";
+            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -446,12 +482,15 @@ namespace NestingApp
             this.ClientSize = new System.Drawing.Size(1143, 633);
             this.Controls.Add(this.skinSplitContainer1);
             this.Controls.Add(this.tspMainTool);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Opacity = 0.8D;
             this.Radius = 8;
+            this.ShowInTaskbar = false;
             this.SkinOpacity = 0.8D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "嵌套";
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.tspMainTool.ResumeLayout(false);
             this.tspMainTool.PerformLayout();
             this.skinSplitContainer1.Panel1.ResumeLayout(false);
@@ -467,6 +506,7 @@ namespace NestingApp
             this.skinSplitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -501,6 +541,10 @@ namespace NestingApp
         private System.Windows.Forms.ToolStripButton tsbSelectAll;
         private System.Windows.Forms.ToolStripButton tsbReSelectAll;
         private System.Windows.Forms.ListView lvwTUS;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem 显示主界面ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
     }
 }
 

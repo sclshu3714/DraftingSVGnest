@@ -168,6 +168,7 @@ namespace NestingApp
         {
             string sss = $"{AppDomain.CurrentDomain.BaseDirectory}\\output.svg";
             Process.Start(sss);
+
         }
 
         /// <summary>
@@ -630,6 +631,44 @@ namespace NestingApp
         private void checkExploreconcaveareas_Click(object sender, EventArgs e)
         {
             this.checkPartinPart.Checked = !this.checkPartinPart.Checked;
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+                this.notifyIcon.Visible = true;
+                //弹气泡/通知框提示
+                this.notifyIcon.ShowBalloonTip(20, "attention", "this is a demo", ToolTipIcon.Info);
+            }
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.WindowState == System.Windows.Forms.FormWindowState.Minimized)
+            {
+                this.Show();
+                this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+            }
+        }
+
+        private void 显示主界面ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                this.Hide();
+            }
+            else
+            {
+                this.Show();
+                this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+            }
+        }
+
+        private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
