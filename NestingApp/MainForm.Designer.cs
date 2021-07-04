@@ -449,7 +449,6 @@ namespace NestingApp
             this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "嵌套";
-            this.notifyIcon.Visible = true;
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
             // contextMenuStrip
@@ -459,13 +458,13 @@ namespace NestingApp
             this.显示主界面ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(154, 52);
+            this.contextMenuStrip.Size = new System.Drawing.Size(124, 52);
             // 
             // 显示主界面ToolStripMenuItem
             // 
             this.显示主界面ToolStripMenuItem.Name = "显示主界面ToolStripMenuItem";
             this.显示主界面ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
-            this.显示主界面ToolStripMenuItem.Text = "显示主界面";
+            this.显示主界面ToolStripMenuItem.Text = "主界面";
             this.显示主界面ToolStripMenuItem.Click += new System.EventHandler(this.显示主界面ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
@@ -484,10 +483,7 @@ namespace NestingApp
             this.Controls.Add(this.tspMainTool);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Opacity = 0.8D;
             this.Radius = 8;
-            this.ShowInTaskbar = false;
-            this.SkinOpacity = 0.8D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "嵌套";
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);

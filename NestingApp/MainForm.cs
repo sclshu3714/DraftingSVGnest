@@ -637,10 +637,11 @@ namespace NestingApp
         {
             if (WindowState == FormWindowState.Minimized)
             {
-                this.Hide();
+                //this.Hide();
+                this.skin.Hide();//.Skin.hide();
                 this.notifyIcon.Visible = true;
                 //弹气泡/通知框提示
-                this.notifyIcon.ShowBalloonTip(20, "attention", "this is a demo", ToolTipIcon.Info);
+                this.notifyIcon.ShowBalloonTip(6, "Nest", "已经隐藏到系统托盘", ToolTipIcon.Info);
             }
         }
 
@@ -648,7 +649,7 @@ namespace NestingApp
         {
             if (this.WindowState == System.Windows.Forms.FormWindowState.Minimized)
             {
-                this.Show();
+                this.skin.Show();
                 this.WindowState = System.Windows.Forms.FormWindowState.Normal;
             }
         }
@@ -657,11 +658,11 @@ namespace NestingApp
         {
             if (this.Visible)
             {
-                this.Hide();
+                this.skin.Hide();
             }
             else
             {
-                this.Show();
+                this.skin.Show();
                 this.WindowState = System.Windows.Forms.FormWindowState.Normal;
             }
         }
