@@ -59,6 +59,8 @@ namespace NestingApp
             this.tsbSelectAll = new System.Windows.Forms.ToolStripButton();
             this.tsbReSelectAll = new System.Windows.Forms.ToolStripButton();
             this.skinSplitContainer2 = new CCWin.SkinControl.SkinSplitContainer();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.skinLabel = new CCWin.SkinControl.SkinLabel();
             this.picNestPath = new CCWin.SkinControl.SkinPictureBox();
             this.lvwTUS = new System.Windows.Forms.ListView();
             this.skinPictureBox3 = new CCWin.SkinControl.SkinPictureBox();
@@ -66,8 +68,6 @@ namespace NestingApp
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.显示主界面ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.skinLabel = new CCWin.SkinControl.SkinLabel();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.tspMainTool.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer1)).BeginInit();
             this.skinSplitContainer1.Panel1.SuspendLayout();
@@ -80,13 +80,13 @@ namespace NestingApp
             this.skinSplitContainer2.Panel1.SuspendLayout();
             this.skinSplitContainer2.Panel2.SuspendLayout();
             this.skinSplitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).BeginInit();
-            this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // tspMainTool
@@ -449,9 +449,41 @@ namespace NestingApp
             // 
             this.skinSplitContainer2.Panel2.Controls.Add(this.lvwTUS);
             this.skinSplitContainer2.Panel2.Controls.Add(this.skinPictureBox3);
+            this.skinSplitContainer2.Panel2Collapsed = true;
             this.skinSplitContainer2.Size = new System.Drawing.Size(868, 521);
             this.skinSplitContainer2.SplitterDistance = 657;
             this.skinSplitContainer2.TabIndex = 0;
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.IsSplitterFixed = true;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.skinLabel);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.picNestPath);
+            this.splitContainer.Size = new System.Drawing.Size(868, 521);
+            this.splitContainer.SplitterDistance = 30;
+            this.splitContainer.TabIndex = 2;
+            // 
+            // skinLabel
+            // 
+            this.skinLabel.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel.BorderColor = System.Drawing.Color.White;
+            this.skinLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.skinLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel.Location = new System.Drawing.Point(0, 0);
+            this.skinLabel.MaximumSize = new System.Drawing.Size(0, 27);
+            this.skinLabel.Name = "skinLabel";
+            this.skinLabel.Size = new System.Drawing.Size(868, 27);
+            this.skinLabel.TabIndex = 1;
             // 
             // picNestPath
             // 
@@ -459,7 +491,7 @@ namespace NestingApp
             this.picNestPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picNestPath.Location = new System.Drawing.Point(0, 0);
             this.picNestPath.Name = "picNestPath";
-            this.picNestPath.Size = new System.Drawing.Size(657, 487);
+            this.picNestPath.Size = new System.Drawing.Size(868, 487);
             this.picNestPath.TabIndex = 0;
             this.picNestPath.TabStop = false;
             // 
@@ -516,38 +548,6 @@ namespace NestingApp
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
-            // skinLabel
-            // 
-            this.skinLabel.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel.BorderColor = System.Drawing.Color.White;
-            this.skinLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.skinLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel.Location = new System.Drawing.Point(0, 0);
-            this.skinLabel.MaximumSize = new System.Drawing.Size(0, 27);
-            this.skinLabel.Name = "skinLabel";
-            this.skinLabel.Size = new System.Drawing.Size(657, 27);
-            this.skinLabel.TabIndex = 1;
-            this.skinLabel.Text = "宽度：10；高度 20";
-            // 
-            // splitContainer
-            // 
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.IsSplitterFixed = true;
-            this.splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer.Name = "splitContainer";
-            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.skinLabel);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.picNestPath);
-            this.splitContainer.Size = new System.Drawing.Size(657, 521);
-            this.splitContainer.SplitterDistance = 30;
-            this.splitContainer.TabIndex = 2;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -576,13 +576,13 @@ namespace NestingApp
             this.skinSplitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.skinSplitContainer2)).EndInit();
             this.skinSplitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).EndInit();
-            this.contextMenuStrip.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picNestPath)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.skinPictureBox3)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
