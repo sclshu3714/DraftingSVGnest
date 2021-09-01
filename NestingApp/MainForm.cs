@@ -39,6 +39,11 @@ namespace NestingApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.lvwTU.SelectedIndexChanged += LvwTU_SelectedIndexChanged;
+            this.skinNumericUpDown.ValueChanged += SkinNumericUpDown_ValueChanged;
+            this.lvwTU.VScroll += LvwTU_VScroll;
+            this.lvwTU.MouseWheel += LvwTU_MouseWheel;
+            this.lvwTU.MouseDown += LvwTU_MouseDown;
             this.txtSpace.TextChanged += TxtSpace_TextChanged;
             this.txtCurve.TextChanged += TxtCurve_TextChanged;
             this.txtPart.TextChanged += TxtPart_TextChanged;
@@ -46,6 +51,54 @@ namespace NestingApp
             this.txtGAmutationrate.TextChanged += TxtGAmutationrate_TextChanged;
             this.checkPartinPart.CheckedChanged += CheckPartinPart_CheckedChanged;
             this.checkExploreconcaveareas.CheckedChanged += CheckExploreconcaveareas_CheckedChanged;
+        }
+
+        private void LvwTU_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (this.lvwTU.SelectedItems.Count == 1)
+            {
+                ListViewItem item = this.lvwTU.SelectedItems[0] as ListViewItem;
+                this.skinNumericUpDown.Value = Convert.ToInt32(item.SubItems[1].Text);
+                this.skinNumericUpDown.Location = new Point(item.Bounds.Left + 160, item.Bounds.Top + 60);
+                this.skinNumericUpDown.Visible = true;
+            }
+        }
+
+        private void LvwTU_MouseWheel(object sender, MouseEventArgs e)
+        {
+            this.skinNumericUpDown.Visible = false;
+        }
+
+        private void LvwTU_VScroll(object sender, EventArgs e)
+        {
+            this.skinNumericUpDown.Visible = false;
+            //if (this.lvwTU.SelectedItems.Count == 1)
+            //{
+            //    ListViewItem item = this.lvwTU.SelectedItems[0] as ListViewItem;
+            //    this.skinNumericUpDown.Value = Convert.ToInt32(item.SubItems[1].Text);
+            //    this.skinNumericUpDown.Location = new Point(item.Bounds.Left + 160, item.Bounds.Top + 60);
+            //    this.skinNumericUpDown.Visible = true;
+            //}
+        }
+
+        private void SkinNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.lvwTU.SelectedItems.Count == 1)
+            {
+                ListViewItem item = this.lvwTU.SelectedItems[0] as ListViewItem;
+                item.SubItems[1].Text = this.skinNumericUpDown.Value.ToString();
+            }
+        }
+
+        private void LvwTU_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.lvwTU.SelectedItems.Count == 1)
+            {
+                ListViewItem item = this.lvwTU.SelectedItems[0] as ListViewItem;
+                this.skinNumericUpDown.Value = Convert.ToInt32(item.SubItems[1].Text);
+                this.skinNumericUpDown.Location = new Point(item.Bounds.Left + 160, item.Bounds.Top + 60);
+                this.skinNumericUpDown.Visible = true;
+            }
         }
 
         #region 设置
@@ -150,7 +203,9 @@ namespace NestingApp
                     if (documentOut.HasChildren())
                     {
                         this.Invoke(new Action(() => {
-                            this.picNestPath.Image = documentOut.Draw(); ;
+                            this.picNestPath.Image = documentOut.Draw();
+                            RectangleF rectangle = GetBounds(documentOut);
+                            this.skinLabel.Text = $"宽度：{rectangle.X + rectangle.Width}；高度：{rectangle.Y + rectangle.Height}";
                         }));
                     }
                 }
@@ -159,6 +214,64 @@ namespace NestingApp
                 this.Invoke(new Action(() => { timer.Stop(); toolStripProgressBar.Value = 100; toolStripProgressBar.Visible = false; this.Refresh(); }));
             }));
         }
+
+        public RectangleF GetBounds(SvgDocument document) {
+            RectangleF rectangle = new RectangleF() { X = 0, Y = 0, Width = 0, Height = 0 };
+            foreach (SvgElement item in document.Children)
+            {
+                switch (item)
+                {
+                    case Svg.SvgGroup Group:
+                        {
+                            foreach (SvgElement node in Group.Nodes.Where(nd => nd is SvgElement))
+                            {
+                                switch (node)
+                                {
+                                    case Svg.SvgGroup CGroup:
+                                        if (rectangle.X < CGroup.Bounds.X)
+                                        {
+                                            rectangle.X = CGroup.Bounds.X;
+                                            rectangle.Width = CGroup.Bounds.Width;
+                                        }
+                                        if (rectangle.Y < CGroup.Bounds.Y)
+                                        {
+                                            rectangle.Y = CGroup.Bounds.Y;
+                                            rectangle.Height = CGroup.Bounds.Height;
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            foreach (SvgElement node in Group.Children.Where(nd => nd is SvgElement))
+                            {
+                                switch (node)
+                                {
+                                    case Svg.SvgGroup CGroup:
+                                        if (rectangle.X < CGroup.Bounds.X)
+                                        {
+                                            rectangle.X = CGroup.Bounds.X;
+                                            rectangle.Width = CGroup.Bounds.Width;
+                                        }
+                                        if (rectangle.Y < CGroup.Bounds.Y)
+                                        {
+                                            rectangle.Y = CGroup.Bounds.Y;
+                                            rectangle.Height = CGroup.Bounds.Height;
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return rectangle;
+        }
+
         /// <summary>
         /// 下载嵌套计算的结果
         /// </summary>
@@ -210,7 +323,7 @@ namespace NestingApp
                     this.lvwTU.BeginUpdate();
                     for (int n = 0; n < imgList.Images.Count; n++)
                     {
-                        ListViewItem lvi = new ListViewItem(Convert.ToString(nestPaths[n].bid.ToString()), n);
+                        ListViewItem lvi = new ListViewItem(new string[] { nestPaths[n].bid.ToString(), "1" }, n);
                         listViews.Add(lvi);
                     }
                     this.lvwTU.Items.AddRange(listViews.ToArray());
@@ -613,9 +726,13 @@ namespace NestingApp
                 {
                     if (item.Checked)
                     {
-                        SelectNestPaths.Add(nestPaths.ElementAt(index));
-                        ListViewItem lvi = new ListViewItem(Convert.ToString(index + 1), index);
-                        this.lvwTUS.Items.Add(lvi);
+                        int num = Convert.ToInt32(item.SubItems[1].Text);
+                        for (int i = 1; i <= num; i++)
+                        {
+                            SelectNestPaths.Add(nestPaths.ElementAt(index));
+                            ListViewItem lvi = new ListViewItem(Convert.ToString(index + i), index);
+                            this.lvwTUS.Items.Add(lvi);
+                        }
                     }
                     index++;
                 }
