@@ -205,7 +205,7 @@ namespace NestingApp
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
             this.toolStripMenuItem1.Text = "间隔：";
             // 
             // txtSpace
@@ -219,7 +219,7 @@ namespace NestingApp
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(182, 26);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(224, 26);
             this.toolStripMenuItem2.Text = "公差：";
             // 
             // txtCurve
@@ -233,7 +233,7 @@ namespace NestingApp
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(182, 26);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(224, 26);
             this.toolStripMenuItem3.Text = "旋转：";
             // 
             // txtPart
@@ -247,7 +247,7 @@ namespace NestingApp
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(182, 26);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(224, 26);
             this.toolStripMenuItem4.Text = "GA入口：";
             // 
             // txtGApopulation
@@ -261,7 +261,7 @@ namespace NestingApp
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(182, 26);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(224, 26);
             this.toolStripMenuItem5.Text = "GA突变率：";
             // 
             // txtGAmutationrate
@@ -275,14 +275,14 @@ namespace NestingApp
             // checkPartinPart
             // 
             this.checkPartinPart.Name = "checkPartinPart";
-            this.checkPartinPart.Size = new System.Drawing.Size(182, 26);
+            this.checkPartinPart.Size = new System.Drawing.Size(224, 26);
             this.checkPartinPart.Text = "部件在部件中";
             this.checkPartinPart.Click += new System.EventHandler(this.checkPartinPart_Click);
             // 
             // checkExploreconcaveareas
             // 
             this.checkExploreconcaveareas.Name = "checkExploreconcaveareas";
-            this.checkExploreconcaveareas.Size = new System.Drawing.Size(182, 26);
+            this.checkExploreconcaveareas.Size = new System.Drawing.Size(224, 26);
             this.checkExploreconcaveareas.Text = "探索凹面";
             this.checkExploreconcaveareas.Click += new System.EventHandler(this.checkExploreconcaveareas_Click);
             // 
@@ -503,7 +503,7 @@ namespace NestingApp
             this.lvwTUS.LargeImageList = this.imgList;
             this.lvwTUS.Location = new System.Drawing.Point(0, 0);
             this.lvwTUS.Name = "lvwTUS";
-            this.lvwTUS.Size = new System.Drawing.Size(207, 521);
+            this.lvwTUS.Size = new System.Drawing.Size(96, 100);
             this.lvwTUS.TabIndex = 3;
             this.lvwTUS.UseCompatibleStateImageBehavior = false;
             // 
@@ -513,7 +513,7 @@ namespace NestingApp
             this.skinPictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.skinPictureBox3.Location = new System.Drawing.Point(0, 0);
             this.skinPictureBox3.Name = "skinPictureBox3";
-            this.skinPictureBox3.Size = new System.Drawing.Size(207, 521);
+            this.skinPictureBox3.Size = new System.Drawing.Size(96, 100);
             this.skinPictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.skinPictureBox3.TabIndex = 1;
             this.skinPictureBox3.TabStop = false;

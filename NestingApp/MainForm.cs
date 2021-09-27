@@ -111,30 +111,58 @@ namespace NestingApp
         {
             
         }
-
+        /// <summary>
+        /// GA突变率
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtGAmutationrate_TextChanged(object sender, EventArgs e)
         {
-            
+            if (!int.TryParse(this.txtGAmutationrate.Text.Trim(), out int reuslt))
+            {
+                this.txtGAmutationrate.Text = "10";
+            }
         }
-
+        /// <summary>
+        /// GA入口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtGApopulation_TextChanged(object sender, EventArgs e)
         {
-            
+            if (!int.TryParse(this.txtGApopulation.Text.Trim(), out int reuslt))
+            {
+                this.txtGApopulation.Text = "10";
+            }
         }
 
         private void TxtPart_TextChanged(object sender, EventArgs e)
         {
             
         }
-
+        /// <summary>
+        /// 曲线公差
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtCurve_TextChanged(object sender, EventArgs e)
         {
-            
+            if (!double.TryParse(this.txtCurve.Text.Trim(), out double reuslt))
+            {
+                this.txtCurve.Text = "0.3";
+            }
         }
-
+        /// <summary>
+        /// 间隔
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtSpace_TextChanged(object sender, EventArgs e)
         {
-            
+            if(!double.TryParse(this.txtSpace.Text.Trim(), out double reuslt))
+            {
+                this.txtSpace.Text = "0";
+            }
         }
 
         #endregion
@@ -159,8 +187,8 @@ namespace NestingApp
             {
                 if (toolStripProgressBar.Value <= 95)
                 {
-                    int sc = Convert.ToInt32(this.txtSpace.Text) <= 0 ? 10 : ((10 / Convert.ToInt32(this.txtSpace.Text) < 0 ? 1 : (10 / Convert.ToInt32(this.txtSpace.Text))));
-                    this.Invoke(new Action(() => { toolStripProgressBar.Value += sc; this.Refresh(); }));
+                    float sc = Convert.ToSingle(this.txtSpace.Text) <= 0 ? 10 : ((10 / Convert.ToSingle(this.txtSpace.Text) < 0 ? 1 : (10 / Convert.ToSingle(this.txtSpace.Text))));
+                    this.Invoke(new Action(() => { toolStripProgressBar.Value += (int)sc; this.Refresh(); }));
                 }
             };
             timer.Start();
@@ -184,7 +212,7 @@ namespace NestingApp
                 Console.WriteLine("Configuring Nest");
                 //Config.CLIIPER_SCALE = Convert.ToInt32(this.txtPart.Text.Trim());
                 Config.CURVE_TOLERANCE = Convert.ToDouble(this.txtCurve.Text.Trim());
-                config.SPACING = Convert.ToInt32(this.txtSpace.Text.Trim());
+                config.SPACING = Convert.ToSingle(this.txtSpace.Text.Trim());
                 config.POPULATION_SIZE = Convert.ToInt32(this.txtGAmutationrate.Text.Trim());
                 config.MUTATION_RATE = Convert.ToInt32(this.txtGApopulation.Text.Trim());
                 //config.CONCAVE = this.checkPartinPart.Checked;
